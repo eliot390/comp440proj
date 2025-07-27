@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+</head>
+<body>
+<h1>User Registration</h1>
+<form id="registerForm">
+    <input name="username" placeholder="Username" required><br><br>
+    <input id="password" name="password" placeholder="Password" type="password" required><br><br>
+    <input id="confirmPassword" placeholder="Confirm Password" type="password" required><br><br>
+    <input name="firstName" placeholder="First Name"><br><br>
+    <input name="lastName" placeholder="Last Name"><br><br>
+    <input name="email" placeholder="Email" type="email" required><br><br>
+    <button type="submit">Register</button>
+</form>
+
+<p id="registerResult" style="color:red;"></p>
+
+<p>Already have an account? <a href="login.html">Login</a></p>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        document.getElementById('registerResult').innerText = "Passwords do not match.";
+        return;
+      }
+
+      const formData = new FormData(this);
+      const data = {
+        username: formData.get('username'),
+        password: password,
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email')
+      };
+
+      const res = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const resultText = await res.text();
+      document.getElementById('registerResult').innerText = resultText;
+    });
+</script>
+</body>
+</html>
