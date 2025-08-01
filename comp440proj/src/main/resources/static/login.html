@@ -36,7 +36,12 @@
       });
 
       const resultText = await res.text();
-      document.getElementById('loginResult').innerText = resultText;
+
+      if (res.ok) {
+        window.location.href = '/items.html';
+      } else {
+        document.getElementById('loginResult').innerText = resultText;
+      }
     });
 </script>
 </body>
