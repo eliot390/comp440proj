@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Items by Category</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="search">
+    <h2>Search Items by Category</h2>
+    <input type="text" id="categoryInput" placeholder="Enter category (e.g. cellphone)" />
+    <button onclick="searchItems()">Search</button>
+
+    <table id="resultsTable" style="display:none;">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Added By</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    async function searchItems() {
+      const category = document.getElementById('categoryInput').value.trim();
+      if (!category) return;
+
+      const response = await fetch(`/items/category?name=${encodeURIComponent(category)}`);
+      const items = await response.json();
+
+      const table = document.getElementById('resultsTable');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
+
+      items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.title}</td>
+          <td>${item.description}</td>
+          <td>${JSON.parse(item.category).join(', ')}</td>
+          <td>$${item.price.toFixed(2)}</td>
+          <td>${item.user?.username ?? ''}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      table.style.display = items.length ? 'table' : 'none';
+    }
+</script>
+</body>
+</html>

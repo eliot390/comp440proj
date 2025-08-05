@@ -1,9 +1,14 @@
 package com.example.comp440proj.item;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.example.comp440proj.user.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -15,8 +20,12 @@ public class Item {
 
   private String title;
   private String description;
+
+  @Column(columnDefinition = "json")
   private String category;
-  private double price;
+
+  @Column(name = "price")
+  private BigDecimal price;
 
   @ManyToOne
   @JoinColumn(name = "username", referencedColumnName = "username")
@@ -58,11 +67,11 @@ public class Item {
     this.category = category;
   }
 
-  public double getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(double price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 
@@ -81,4 +90,24 @@ public class Item {
   public void setCreatedAt(LocalDate createdAt) {
     this.createdAt = createdAt;
   }
+
+  public List<String> getCategoryList() {
+    if (category == null) return null;
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(category, new TypeReference<List<String>>() {});
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to parse category JSON", e);
+    }
+  }
+
+  public void setCategoryList(List<String> categoryList) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      this.category = mapper.writeValueAsString(categoryList);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to convert category list to JSON", e);
+    }
+  }
+
 }

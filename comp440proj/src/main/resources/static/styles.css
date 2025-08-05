@@ -35,17 +35,38 @@ h1 {
   flex-direction: column;
 }
 
+#search {
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: inherit;
+  margin: auto;
+  padding-bottom: inherit;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#categoryInput {
+  width: 50%;
+}
+
+#resultsTable {
+  width: 95%;
+  border-collapse: collapse;
+}
+
 #usersTable {
   width: 600px;
   border-collapse: collapse;
 }
 
-#usersTable td {
+#usersTable td, #resultsTable td {
   padding: 3px;
   border: 1px solid;
 }
 
-#usersTable tr:nth-child(even) {
+#usersTable tr:nth-child(even), #resultsTable tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 

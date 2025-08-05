@@ -22,28 +22,44 @@ public class ItemController {
   private UserRepository userRepository;
 
   @PostMapping("/add")
-  public ResponseEntity<String> addItem(@RequestBody Item item, @RequestParam String username) {
-    Optional<User> userOpt = userRepository.findByUsername(username);
+  public ResponseEntity<String> addItem(@RequestBody ItemRequest request) {
+    Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
     if (userOpt.isEmpty()) {
       return ResponseEntity.badRequest().body("User not found.");
     }
 
     LocalDate today = LocalDate.now();
-    int itemsToday = itemRepository.countItemsByUserAndDate(username, today);
+    int itemsToday = itemRepository.countItemsByUserAndDate(request.getUsername(), today);
 
     if (itemsToday >= 2) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only post 2 items per day.");
     }
 
+    Item item = new Item();
+    item.setTitle(request.getTitle());
+    item.setDescription(request.getDescription());
+    item.setCategoryList(request.getCategory()); // converts List<String> to JSON
+    item.setPrice(request.getPrice());
     item.setUser(userOpt.get());
     item.setCreatedAt(today);
+
     itemRepository.save(item);
     return ResponseEntity.ok("Item added successfully.");
   }
+
 
   @GetMapping("/user")
   public ResponseEntity<List<Item>> getUserItems(@RequestParam String username) {
     return ResponseEntity.ok(itemRepository.findByUserUsername(username));
   }
+
+  @GetMapping("/category")
+  public ResponseEntity<List<Item>> getItemsByCategory(@RequestParam String name) {
+    // JSON_CONTAINS requires the value to be in double quotes
+    String quotedName = "\"" + name + "\"";
+    List<Item> items = itemRepository.findByCategoryContaining(quotedName);
+    return ResponseEntity.ok(items);
+  }
+
 }
