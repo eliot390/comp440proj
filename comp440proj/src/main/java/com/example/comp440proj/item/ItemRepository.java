@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -18,5 +19,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
   @Query(value = "SELECT * FROM items WHERE JSON_CONTAINS(category, :category)", nativeQuery = true)
   List<Item> findByCategoryContaining(@Param("category") String category);
 
+  Optional<Item> findById(Long id);
 
 }

@@ -48,8 +48,16 @@
           <td>${JSON.parse(item.category).join(', ')}</td>
           <td>$${item.price.toFixed(2)}</td>
           <td>${item.user?.username ?? ''}</td>
+          <td><button class="review-button-sm" data-item-id="${item.id}">Review</button></td>
         `;
         tbody.appendChild(row);
+      });
+
+      document.querySelectorAll('.review-button-sm').forEach(button => {
+        button.addEventListener('click', function () {
+          const itemId = this.getAttribute('data-item-id');
+          window.location.href = `/review.html?itemId=${itemId}`;
+        });
       });
 
       table.style.display = items.length ? 'table' : 'none';

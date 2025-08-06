@@ -111,7 +111,7 @@ h1 {
   color: black;
 }
 
-.button-sm {
+.button-sm, .review-button-sm {
   background-color: #eeedf7;
   border: 1px solid black;
   border-radius: 4px;
@@ -124,7 +124,7 @@ h1 {
   color: black;
 }
 
-.button-sm:hover, .button:hover {
+.button-sm:hover, .button:hover, .review-button-sm:hover {
   background-color: #6ab76f;
 }
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Users</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="main">
+    <h2>Leave a Review</h2>
+    <form id="reviewForm">
+        <input type="hidden" name="itemId" id="itemId">
+        <label for="rating">Rating:</label>
+        <select name="rating" required>
+            <option value="">Select rating</option>
+            <option value="excellent">Excellent</option>
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="poor">Poor</option>
+        </select><br><br>
+        <textarea name="comment" placeholder="Write your review..." rows="4" cols="40"></textarea><br>
+        <button class="button-sm" type="submit">Submit Review</button>
+    </form>
+    <button class="button-sm" id="logout">Logout</button>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('itemId');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('itemId').value = itemId;
+    });
+
+    async function loadItemsForReview() {
+      const res = await fetch('/items/all'); // assuming you have this endpoint
+      const items = await res.json();
+
+      const select = document.getElementById('itemSelect');
+      items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.title;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById('reviewForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        itemId: parseInt(formData.get('itemId')),
+        rating: formData.get('rating'),
+        comment: formData.get('comment')
+        // username will be filled in on the server from session
+      };
+
+      const res = await fetch('/reviews/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      alert(await res.text());
+    });
+
+    // Run on page load
+    window.addEventListener('DOMContentLoaded', loadItemsForReview);
+</script>
+</body>
+</html>

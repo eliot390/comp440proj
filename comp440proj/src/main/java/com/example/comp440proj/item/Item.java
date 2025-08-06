@@ -21,6 +21,9 @@ public class Item {
   private String title;
   private String description;
 
+  @Column(insertable = false, updatable = false)
+  private String username;
+
   @Column(columnDefinition = "json")
   private String category;
 
@@ -110,4 +113,11 @@ public class Item {
     }
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
 }
