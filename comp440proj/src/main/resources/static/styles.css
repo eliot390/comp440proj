@@ -21,6 +21,7 @@ h1 {
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 #main-table {
@@ -45,15 +46,18 @@ h1 {
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 #categoryInput {
-  width: 50%;
+  width: 75%;
+  margin-right: 20px;
 }
 
 #resultsTable {
   width: 95%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 #usersTable {
@@ -73,6 +77,21 @@ h1 {
 #textbox {
   width: -moz-available;
   height: 100px;
+}
+
+#search-row {
+  width: 60%;
+}
+
+#button-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+#logout {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 #buttons {
@@ -107,6 +126,10 @@ h1 {
 
 .button-sm:hover, .button:hover {
   background-color: #6ab76f;
+}
+
+#itemForm {
+  margin-bottom: 20px;
 }
 
 form {

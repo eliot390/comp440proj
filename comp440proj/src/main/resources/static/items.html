@@ -12,12 +12,27 @@
         <textarea id="textbox" name="description" placeholder="Description"></textarea><br>
         <input name="category" placeholder="Category"><br>
         <input name="price" type="number" step="0.01" placeholder="Price"><br>
-        <input name="username" placeholder="Username (who's logged in)"><br>
-        <button type="submit">Add Item</button>
+        <input type="hidden" name="username" id="username"><br>
+        <div id="button-row">
+            <button class="button-sm" type="submit">Add Item</button>
+            <a class="button-sm" href="search.html">Search</a>
+        </div>
     </form>
+    <button class="button-sm" id="logout">Logout</button>
 </div>
 
 <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+        const res = await fetch('/current-user');
+        if (res.ok) {
+            const username = await res.text();
+            document.getElementById('username').value = username;
+        } else {
+            alert("You're not logged in. Redirecting to login page.");
+            window.location.href = '/login.html';
+        }
+    });
+
     document.getElementById('itemForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const formData = new FormData(this);
@@ -27,14 +42,14 @@
         const categoryArray = categoryInput
             .split(',')
             .map(s => s.trim())
-            .filter(s => s.length > 0); // Remove empty entries
+            .filter(s => s.length > 0);
 
         const data = {
             title: formData.get('title'),
             description: formData.get('description'),
             category: categoryArray, // send as array
             price: parseFloat(formData.get('price')),
-            username: formData.get('username') // include username directly here
+            username: formData.get('username')
         };
 
         const res = await fetch('/items/add', {

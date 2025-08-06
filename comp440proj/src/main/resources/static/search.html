@@ -8,8 +8,10 @@
 <body>
 <div id="search">
     <h2>Search Items by Category</h2>
-    <input type="text" id="categoryInput" placeholder="Enter category (e.g. cellphone)" />
-    <button onclick="searchItems()">Search</button>
+    <div id="search-row">
+        <input type="text" id="categoryInput" placeholder="Enter category (e.g. cellphone)" />
+        <button class="button-sm" onclick="searchItems()">Search</button>
+    </div>
 
     <table id="resultsTable" style="display:none;">
         <thead>
@@ -23,6 +25,7 @@
         </thead>
         <tbody></tbody>
     </table>
+    <button class="button-sm" id="logout">Logout</button>
 </div>
 
 <script>

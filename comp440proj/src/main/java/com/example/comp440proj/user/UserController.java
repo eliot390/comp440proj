@@ -1,5 +1,6 @@
 package com.example.comp440proj.user;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,15 +61,32 @@ public class UserController {
    *   "password": "password123"
    * }
    **/
-  public ResponseEntity<String> login(@RequestBody User loginRequest) {
+  public ResponseEntity<String> login(@RequestBody User loginRequest, HttpSession session) {
     Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
     if (userOpt.isPresent()) {
       User user = userOpt.get();
       if (user.getPassword().equals(loginRequest.getPassword())) {
+        session.setAttribute("username", user.getUsername());
         return ResponseEntity.ok("Login successful.");
       }
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<String> logout(HttpSession session) {
+    session.invalidate();
+    return ResponseEntity.ok("Successfully logged out.");
+  }
+
+  @GetMapping("/current-user")
+  public ResponseEntity<String> getCurrentUser(HttpSession session) {
+    String username = (String) session.getAttribute("username");
+    if (username != null) {
+      return ResponseEntity.ok(username);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+    }
   }
 }
