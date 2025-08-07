@@ -60,6 +60,18 @@
 
         alert(await res.text());
     });
+
+    document.getElementById('logout').addEventListener('click', async () => {
+        console.log("Logout button clicked.");
+        const res = await fetch('/logout', { method: 'POST' });
+
+        if (res.ok) {
+          alert("Logged out successfully.");
+          window.location.href = '/index.html';
+        } else {
+          alert("Logout failed.");
+        }
+    });
 </script>
 
 </body>
