@@ -54,4 +54,9 @@ public class ReviewController {
     return reviewRepository.findByItemId(itemId);
   }
 
+  @GetMapping("/all-reviewed")
+  public List<Object[]> getReviewedItems() {
+    return reviewRepository.findReviewedItems();
+  }
+
 }
