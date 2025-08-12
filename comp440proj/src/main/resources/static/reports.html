@@ -1,0 +1,43 @@
+<section style="border:1px solid #ddd; padding:12px; margin:12px 0;">
+    <h3>1) Most expensive items in each category</h3>
+    <button id="btnExpensive">Run</button>
+    <div id="outExpensive" style="margin-top:8px;"></div>
+</section>
+
+<section style="border:1px solid #ddd; padding:12px; margin:12px 0;">
+    <h3>2) Users who posted category X and Y on the same day</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input id="catX" placeholder="Category X" />
+        <input id="catY" placeholder="Category Y" />
+        <button id="btnSameDay">Search</button>
+    </div>
+    <div id="outSameDay" style="margin-top:8px;"></div>
+</section>
+
+<script>
+    function renderTable(containerId, rows) {
+        const el = document.getElementById(containerId);
+        if (!rows || rows.length === 0) { el.innerHTML = "<i>No results</i>"; return; }
+        const headers = Object.keys(rows[0]);
+        const thead = `<tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr>`;
+        const tbody = rows.map(r => `<tr>${headers.map(h=>`<td>${r[h] ?? ""}</td>`).join("")}</tr>`).join("");
+        el.innerHTML = `<table style="width:100%; border-collapse:collapse">
+    <thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+    }
+
+    // #1
+    document.getElementById("btnExpensive").onclick = async () => {
+        const res = await fetch("/reports/expensive-by-category");
+        renderTable("outExpensive", await res.json());
+    };
+
+    // #2
+    document.getElementById("btnSameDay").onclick = async () => {
+        const catX = document.getElementById("catX").value.trim();
+        const catY = document.getElementById("catY").value.trim();
+        if (!catX || !catY) return alert("Enter both categories.");
+        const res = await fetch(`/reports/users-same-day-two-cats?catX=${encodeURIComponent(catX)}&catY=${encodeURIComponent(catY)}`);
+        const data = (await res.json()).map(u => ({ username: u }));
+        renderTable("outSameDay", data);
+    };
+</script>
