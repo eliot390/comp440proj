@@ -52,23 +52,18 @@ h1 {
   margin-right: 20px;
 }
 
-#resultsTable {
+#resultsTable, #outExpensive, #outSameDay, #outRatings, #outSpecificDate {
   width: 95%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-#usersTable {
-  width: 600px;
-  border-collapse: collapse;
-}
-
-#usersTable td, #resultsTable td {
+#resultsTable td, #outExpensive td, #outSameDay td, #outRatings td, #outSpecificDate td {
   padding: 3px;
   border: 1px solid;
 }
 
-#usersTable tr:nth-child(even), #resultsTable tr:nth-child(even) {
+#resultsTable tr:nth-child(even), #outExpensive tr:nth-child(even), #outSameDay tr:nth-child(even), #outRatings tr:nth-child(even), #outSpecificDate tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 

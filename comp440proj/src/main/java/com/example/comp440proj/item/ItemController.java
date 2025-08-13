@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -61,5 +62,16 @@ public class ItemController {
     List<Item> items = itemRepository.findByCategoryContaining(quotedName);
     return ResponseEntity.ok(items);
   }
+
+  @GetMapping("/users-by-date")
+  public List<Map<String, Object>> getUsersByDate(@RequestParam("created_at") String date) {
+    return itemRepository.findUsersByDate(date);
+  }
+
+  @GetMapping("/ratings-by-user")
+  public List<Map<String, Object>> getRatingsByUser(@RequestParam String username) {
+    return itemRepository.findExcellentOrGoodByUser(username);
+  }
+
 
 }

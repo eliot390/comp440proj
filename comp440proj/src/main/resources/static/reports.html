@@ -26,7 +26,7 @@
     <section id="field-section">
         <h3>3) "Excellent/Good" rated items by User</h3>
         <div id="input-section">
-            <input id="catX" placeholder="Username" />
+            <input id="ratingsUsername" placeholder="Username" />
             <button class="button-sm" id="btnRatings">Search</button>
         </div>
         <div id="outRatings" style="margin-top:8px;"></div>
@@ -35,8 +35,7 @@
     <section id="field-section">
         <h3>4) Users who posted on a certain date</h3>
         <div id="input-section">
-            <input id="catX" placeholder="User" />
-            <input type="date"/>
+            <input type="date" id="specificDateInput"/>
             <button class="button-sm" id="btnSpecificDate">Search</button>
         </div>
         <div id="outSpecificDate" style="margin-top:8px;"></div>
@@ -71,6 +70,54 @@
         const data = (await res.json()).map(u => ({ username: u }));
         renderTable("outSameDay", data);
     };
+
+    // #3
+    document.getElementById("btnRatings").onclick = async () => {
+        console.log("Search clicked!");
+        const username = document.getElementById("ratingsUsername").value.trim();
+        if (!username) return alert("Please enter a username.");
+
+        const res = await fetch(`/items/ratings-by-user?username=${encodeURIComponent(username)}`);
+        const data = await res.json();
+
+        renderTable("outRatings", data);
+    };
+
+
+    // #4
+    document.getElementById("btnSpecificDate").addEventListener("click", async () => {
+    const dateValue = document.getElementById("specificDateInput").value;
+    const output = document.getElementById("outSpecificDate");
+
+    // Clear previous results
+    output.innerHTML = "";
+
+    if (!dateValue) {
+        output.innerHTML = "<span style='color:red;'>Please select a date.</span>";
+        return;
+    }
+
+    try {
+        const response = await fetch(`/items/users-by-date?created_at=${dateValue}`);
+        if (!response.ok) throw new Error("Network error");
+
+        const data = await response.json();
+
+        if (data.length === 0) {
+            output.innerHTML = "<em>No users posted on this date.</em>";
+        } else {
+            let html = "<ul>";
+            data.forEach(user => {
+                html += `<li><strong>${user.username}</strong> — ${user.item_count} items</li>`;
+            });
+            html += "</ul>";
+            output.innerHTML = html;
+        }
+    } catch (error) {
+        console.error(error);
+        output.innerHTML = "<span style='color:red;'>Error fetching data.</span>";
+    }
+});
 
     document.getElementById('home-btn').addEventListener('click', async () => {
       window.location.href = '/home.html';
