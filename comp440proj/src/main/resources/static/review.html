@@ -21,6 +21,7 @@
         <textarea name="comment" placeholder="Write your review..." rows="4" cols="40"></textarea><br>
         <button class="button-sm" type="submit">Submit Review</button>
     </form>
+    <button class="button-sm" id="home-btn">Home</button>
     <button class="button-sm" id="logout">Logout</button>
 </div>
 
@@ -67,6 +68,10 @@
 
     // Run on page load
     window.addEventListener('DOMContentLoaded', loadItemsForReview);
+
+    document.getElementById('home-btn').addEventListener('click', async () => {
+        window.location.href = '/home.html';
+    });
 
     document.getElementById('logout').addEventListener('click', async () => {
       const res = await fetch('/logout', { method: 'POST' });

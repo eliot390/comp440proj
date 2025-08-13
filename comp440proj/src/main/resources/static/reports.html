@@ -1,18 +1,49 @@
-<section style="border:1px solid #ddd; padding:12px; margin:12px 0;">
-    <h3>1) Most expensive items in each category</h3>
-    <button id="btnExpensive">Run</button>
-    <div id="outExpensive" style="margin-top:8px;"></div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Users</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="search">
+    <section id="field-section">
+        <h3>1) Most expensive items in each category</h3>
+        <button class="button-sm" id="btnExpensive">Run</button>
+        <div id="outExpensive" style="margin-top:8px;"></div>
+    </section>
 
-<section style="border:1px solid #ddd; padding:12px; margin:12px 0;">
-    <h3>2) Users who posted category X and Y on the same day</h3>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="catX" placeholder="Category X" />
-        <input id="catY" placeholder="Category Y" />
-        <button id="btnSameDay">Search</button>
-    </div>
-    <div id="outSameDay" style="margin-top:8px;"></div>
-</section>
+    <section id="field-section">
+        <h3>2) Users who posted category X and Y on the same day</h3>
+        <div id="input-section">
+            <input id="catX" placeholder="Category X" />
+            <input id="catY" placeholder="Category Y" />
+            <button class="button-sm" id="btnSameDay">Search</button>
+        </div>
+        <div id="outSameDay" style="margin-top:8px;"></div>
+    </section>
+
+    <section id="field-section">
+        <h3>3) "Excellent/Good" rated items by User</h3>
+        <div id="input-section">
+            <input id="catX" placeholder="Username" />
+            <button class="button-sm" id="btnRatings">Search</button>
+        </div>
+        <div id="outRatings" style="margin-top:8px;"></div>
+    </section>
+
+    <section id="field-section">
+        <h3>4) Users who posted on a certain date</h3>
+        <div id="input-section">
+            <input id="catX" placeholder="User" />
+            <input type="date"/>
+            <button class="button-sm" id="btnSpecificDate">Search</button>
+        </div>
+        <div id="outSpecificDate" style="margin-top:8px;"></div>
+    </section>
+    <button class="button-sm" id="home-btn">Home</button>
+    <button class="button-sm" id="logout">Logout</button>
+</div>
 
 <script>
     function renderTable(containerId, rows) {
@@ -40,4 +71,21 @@
         const data = (await res.json()).map(u => ({ username: u }));
         renderTable("outSameDay", data);
     };
+
+    document.getElementById('home-btn').addEventListener('click', async () => {
+      window.location.href = '/home.html';
+    });
+
+    document.getElementById('logout').addEventListener('click', async () => {
+    const res = await fetch('/logout', { method: 'POST' });
+
+    if (res.ok) {
+      alert("Logged out successfully.");
+      window.location.href = '/login.html'; // Redirect to login page
+    } else {
+      alert("Logout failed.");
+    }
+  });
 </script>
+</body>
+</html>
