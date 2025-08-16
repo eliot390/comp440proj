@@ -14,4 +14,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
           "FROM Item i LEFT JOIN Review r ON i.id = r.itemId " +
           "WHERE r.rating IS NOT NULL")
   List<Object[]> findReviewedItems();
+
+  @Query("""
+         SELECT r.username
+         FROM Review r
+         GROUP BY r.username
+         HAVING COUNT(r) > 0
+            AND SUM(CASE WHEN LOWER(COALESCE(r.rating, '')) <> 'poor' THEN 1 ELSE 0 END) = 0
+         """)
+  List<String> findUsersWithOnlyPoorReviews();
 }

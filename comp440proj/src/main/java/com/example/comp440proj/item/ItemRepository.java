@@ -90,4 +90,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
         )
         """, nativeQuery = true)
   List<Map<String, Object>> findUsersByDate(@Param("date") String date);
+
+  @Query(value = """
+SELECT i.username FROM items i LEFT JOIN review r
+ON r.item_id = i.id AND r.rating = 'poor'
+GROUP BY i.username HAVING COUNT(i.id) > 0
+AND SUM(CASE WHEN r.id IS NOT NULL THEN 1 ELSE 0 END) = 0
+""", nativeQuery =  true)
+  List<String> findUsersWhoseItemsNeverGotPoor();
+
 }
