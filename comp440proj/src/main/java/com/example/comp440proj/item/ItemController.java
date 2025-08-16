@@ -72,6 +72,9 @@ public class ItemController {
   public List<Map<String, Object>> getRatingsByUser(@RequestParam String username) {
     return itemRepository.findExcellentOrGoodByUser(username);
   }
-
+  @GetMapping("/users-never-poor")
+  public ResponseEntity<List<String>> getUsersWhoseItemsNeverGotPoor() {
+    return ResponseEntity.ok(itemRepository.findUsersWhoseItemsNeverGotPoor());
+  }
 
 }

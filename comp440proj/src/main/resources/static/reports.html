@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>All Users</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="reports.css">
 </head>
 <body>
 <div id="search">
@@ -40,8 +40,20 @@
         </div>
         <div id="outSpecificDate" style="margin-top:8px;"></div>
     </section>
+    <section>
+            <h3>5) Users who posted only “poor” reviews</h3>
+            <button id="btnOnlyPoor" class="button-sm" type="button">Poor Reviewers</button>
+        <ul id="outOnlyPoor"></ul>
+    </section>
+    <section>
+            <h3>6) Users whose items never received a “poor” review</h3>
+            <button id="btn-never-poor" class="button-sm" type="button">Never Received Poor Reviews</button>
+        <ul id="list-never-poor"></ul>
+    </section>
     <button class="button-sm" id="home-btn">Home</button>
     <button class="button-sm" id="logout">Logout</button>
+
+
 </div>
 
 <script>
@@ -133,6 +145,40 @@
       alert("Logout failed.");
     }
   });
+    async function loadOnlyPoor() {
+        const ul = document.getElementById('outOnlyPoor');
+        ul.innerHTML = '<li>Loading…</li>';
+        try {
+            const res = await fetch('/reviews/users-only-poor');
+            if (!res.ok) throw new Error(res.status);
+            const users = await res.json();
+            ul.innerHTML = users.length ? users.map(u => `<li>${u}</li>`).join('') : '<li>No users found.</li>';
+        } catch (e) {
+            console.error(e);
+            ul.innerHTML = '<li>Error loading data.</li>';
+        }
+    }
+
+    async function loadNeverPoor() {
+        const ul = document.getElementById('list-never-poor');
+        ul.innerHTML = '<li>Loading…</li>';
+        try {
+            const res = await fetch('/items/users-never-poor');
+            if (!res.ok) throw new Error(res.status);
+            const users = await res.json();
+            ul.innerHTML = users.length ? users.map(u => `<li>${u}</li>`).join('') : '<li>No users found.</li>';
+        } catch (e) {
+            console.error(e);
+            ul.innerHTML = '<li>Error loading data.</li>';
+        }
+    }
+
+    document.getElementById('btnOnlyPoor').addEventListener('click', loadOnlyPoor);
+    document.getElementById('btn-never-poor').addEventListener('click', loadNeverPoor);
+
+    document.getElementById('home-btn').addEventListener('click', () => {
+        window.location.href = '/home.html';
+    });
 </script>
 </body>
 </html>

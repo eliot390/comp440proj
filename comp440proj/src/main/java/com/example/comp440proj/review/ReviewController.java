@@ -59,4 +59,8 @@ public class ReviewController {
     return reviewRepository.findReviewedItems();
   }
 
+  @GetMapping("/users-only-poor")
+  public ResponseEntity<List<String>> getUsersWithOnlyPoorReviews() {
+    return ResponseEntity.ok(reviewRepository.findUsersWithOnlyPoorReviews());
+  }
 }
