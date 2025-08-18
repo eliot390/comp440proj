@@ -1,0 +1,36 @@
+html,body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #315e26;
+    font-family: Arial, sans-serif;
+}
+.container {
+    background-color: #b1dd9e;
+    padding: 70%;
+    border-radius: 70%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 700px;
+    text-align: center;
+}
+input[name="categoryInput"]{
+    font-size: 18px;
+    width:  450px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+button{
+    font-size: 18px;
+    width: 350px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}

@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>Search Items by Category</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="search.css">
 </head>
 <body>
+<div class="container">
 <div id="search">
     <h2>Search Items by Category</h2>
     <div id="search-row">
-        <input type="text" id="categoryInput" placeholder="Enter category (e.g. cellphone)" />
+        <input type="text" id="categoryInput" name= "categoryInput" placeholder="Enter category (e.g. cellphone)" />
         <button class="button-sm" onclick="searchItems()">Search</button>
     </div>
 
@@ -25,25 +26,25 @@
         </thead>
         <tbody></tbody>
     </table>
-    <button class="button-sm" id="home-btn">Home</button>
-    <button class="button-sm" id="logout">Logout</button>
+    <button class="button-sm" onclick="window.location.href='/home.html'">Home</button>
+    <button class="button-sm" onclick="window.location.href='/index.html'">Logout</button>
 </div>
-
+</div>
 <script>
     async function searchItems() {
-      const category = document.getElementById('categoryInput').value.trim();
-      if (!category) return;
+        const category = document.getElementById('categoryInput').value.trim();
+        if (!category) return;
 
-      const response = await fetch(`/items/category?name=${encodeURIComponent(category)}`);
-      const items = await response.json();
+        const response = await fetch(`/items/category?name=${encodeURIComponent(category)}`);
+        const items = await response.json();
 
-      const table = document.getElementById('resultsTable');
-      const tbody = table.querySelector('tbody');
-      tbody.innerHTML = '';
+        const table = document.getElementById('resultsTable');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
 
-      items.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        items.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
           <td>${item.title}</td>
           <td>${item.description}</td>
           <td>${JSON.parse(item.category).join(', ')}</td>
@@ -51,32 +52,17 @@
           <td>${item.user?.username ?? ''}</td>
           <td><button class="review-button-sm" data-item-id="${item.id}">Review</button></td>
         `;
-        tbody.appendChild(row);
-      });
-
-      document.querySelectorAll('.review-button-sm').forEach(button => {
-        button.addEventListener('click', function () {
-          const itemId = this.getAttribute('data-item-id');
-          window.location.href = `/review.html?itemId=${itemId}`;
+            tbody.appendChild(row);
         });
-      });
 
-      table.style.display = items.length ? 'table' : 'none';
+        document.querySelectorAll('.review-button-sm').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-item-id');
+                window.location.href = `/review.html?itemId=${itemId}`;
+            });
+        });
 
-      document.getElementById('home-btn').addEventListener('click', async () => {
-        window.location.href = '/home.html';
-    });
-
-      document.getElementById('logout').addEventListener('click', async () => {
-        const res = await fetch('/logout', { method: 'POST' });
-
-        if (res.ok) {
-          alert("Logged out successfully.");
-          window.location.href = '/index.html';
-        } else {
-          alert("Logout failed.");
-        }
-      });
+        table.style.display = items.length ? 'table' : 'none';
     }
 </script>
 </body>
